@@ -17,9 +17,9 @@ def sendAndReceiveChatScript(msgToSend, server='127.0.0.1', port=1024, timeout=1
         msg = ''
         while True:
             chunk = s.recv(1024)
-            if chunk == '':
+            if chunk == b'':
                 break
-            msg = msg + chunk
+            msg = msg + chunk.decode("utf-8")
         s.close()
         return msg
     except:
@@ -57,12 +57,12 @@ if __name__ == '__main__':
         server = opts.server
 
     if opts.port is not None:
-        port = opts.port
+        port = int(opts.port)
 
     print("Hi " + user + ", enter ':quit' to end this session")
 
     while True:
-        s = input(user + ">: ").lower().strip()
+        s = input("[" + user + "]" + ">: ").lower().strip()
         if s == ':quit':
             break
 
@@ -72,9 +72,11 @@ if __name__ == '__main__':
             s = " "
         # Send this to the server and print the response
         # Put in null terminations as required
-        resp = sendAndReceiveChatScript(u'%s\u0000%s\u0000%s\u0000' % (user, botname, s), server=server, port=port)
+        msg = u'%s\u0000%s\u0000%s\u0000' % (user, botname, s)
+        msg = str.encode(msg)
+        resp = sendAndReceiveChatScript(msg, server=server, port=port)
         if resp is None:
             print("Error communicating with Chat Server")
             break  # Stop on any error
         else:
-            print("Bot: " + resp)
+            print("[Bot]: " + resp)
