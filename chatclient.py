@@ -59,10 +59,10 @@ if __name__ == '__main__':
     if opts.port is not None:
         port = opts.port
 
-    print("Hi " + user + ", enter :quit to end this session")
+    print("Hi " + user + ", enter ':quit' to end this session")
 
     while True:
-        s = input(user + ">").lower().strip()
+        s = input(user + ">: ").lower().strip()
         if s == ':quit':
             break
 
@@ -77,4 +77,4 @@ if __name__ == '__main__':
             print("Error communicating with Chat Server")
             break  # Stop on any error
         else:
-            print(resp)
+            print("Bot: " + resp)
